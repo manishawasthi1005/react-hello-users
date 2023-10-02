@@ -1,5 +1,6 @@
-FROM nginx:alpine
-WORKDIR /var/www/web
-COPY build .
-COPY nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
+FROM node:alpine
+WORKDIR '/app'
+COPY package.json .
+RUN npm install
+COPY . .
+CMD ["npm", "start"]
