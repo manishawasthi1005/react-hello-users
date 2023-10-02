@@ -1,13 +1,12 @@
-FROM node:alpine
-RUN mkdir -p /home/node/app &&\
- chown -R node:node /home/node/app
-WORKDIR /home/node/app
+FROM node:alpine AS build
+WORKDIR /client
+COPY package.json .
+RUN npm i
+COPY . .
+RUN npm run build
 
-RUN chgrp -R 0 /home/node/app &&\
- chmod -R g+rwX /home/node/app
-COPY package.json /home/node/app/
-USER 1000
-RUN npm install
-COPY --chown=node:node . /home/node/app
+FROM nginx
+COPY --from=build /client/build /user/share/nginx/html
+
 EXPOSE 3000
 CMD ["npm", "start"]
