@@ -8,5 +8,3 @@ RUN npm run build
 FROM nginx
 COPY --from=build /client/build /user/share/nginx/html
 
-EXPOSE 3000
-CMD ["npm", "start"]
